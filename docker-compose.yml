@@ -1,0 +1,16 @@
+services:
+  api:
+    image: lordtibu/notes-api:v2
+    ports:
+      - "3000:3000"
+
+  db:
+    image: postgres:alpine
+    env_file:
+      - .env
+    volumes:
+      - db-data:/var/lib/postgresql/data
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+
+volumes:
+  db-data:

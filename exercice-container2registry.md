@@ -1,5 +1,3 @@
-# TP2
-
 # Exercice — Containers → Registry
 
 ## 🎯 Objectifs pédagogiques (alignés “cloud-native”)
@@ -11,7 +9,7 @@
 - comprendre pourquoi le cloud “sépare” compute et stockage
 
 ## Partie 0 — Pré-requis techniques
-- Docker Desktop installé et démarré (pas installé sur linux)
+- Docker Desktop installé et démarré
 - Le projet `notes-api` (Dockerfile déjà fourni dans le cours)
 - Créer un compte Docker Hub (gratuit) : https://hub.docker.com (il faudra se souvenirs de son **username Docker Hub**)
 
@@ -25,22 +23,15 @@
 ```bash
 docker build -t notes-api .
 ```
-image node 18 trop lourde, on utilise alpine (image plus légère)
 
 #### Observations
 ```bash
 docker images | grep notes-api
 ```
 > Attendu : une image `notes-api` apparaît (tag `latest` par défaut).
-resultat:
-```
-notes-api:latest                                              b87b20f160fa        252MB           62MB        
-```
 
 #### Question de réflexion
 > Pourquoi une image locale ne suffit pas ?
-
-parce que l'image locale n'est pas accessible depuis d'autres machines, alors que le registry permet de la partager facilement.
 
 ### Étape 1.2 — Login
 ```bash
@@ -48,8 +39,6 @@ docker login
 ```
 #### Question de réflexion 
 > Pourquoi faire la commande `docker login` ? 
-
-Pour se connecter à docker hub et pouvoir pousser des images.
 
 ### Étape 1.3 — Tag
 
@@ -66,18 +55,13 @@ docker tag notes-api <username>/notes-api:v1
 #### Question de réflexion 
 > Quelles différences y a-t-il entre `docker tag` et `docker build` ?
 
-le docker build crée une image et de base il assigne latest comme version, tandis que docker tag attribue un nom et une version à une image existante.
-
 ### Étape 1.4 — Push
 ```bash
 docker push <username>/notes-api:v1
 ```
 
-#### Question de réflexion
+#### Question de réflexion 
 > Que ce qui se passe réellement avec un `docker push` ?
-
-L'image qu'on a crée est publié dans le registry de docker
-
 
 #### Observations
 - Sur Docker Hub : le repository `<username>/notes-api` existe
