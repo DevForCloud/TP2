@@ -1,6 +1,6 @@
 services:
   api:
-    build: ./api
+    image: jaypi42000/notes-api:v2
     ports:
       - "3000:3000"
     env_file:
@@ -12,6 +12,7 @@ services:
       - .env
     volumes:
       - db-data:/var/lib/postgresql/data
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
 
 volumes:
   db-data:

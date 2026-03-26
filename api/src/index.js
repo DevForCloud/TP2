@@ -11,11 +11,11 @@ app.use(express.json());
 // =======================
 
 const pool = new Pool({
-  host: process.env.DB_HOST,
+  host: process.env.POSTGRES_HOST,
   port: process.env.DB_PORT,
-  database: process.env.DB_NAME,
-  user: process.env.DB_USER,
-  password: process.env.DB_PASSWORD,
+  database: process.env.POSTGRES_DB,
+  user: process.env.POSTGRES_USER,
+  password: process.env.POSTGRES_PASSWORD,
 });
 
 async function waitForDb(retries = 5, delay = 3000) {
@@ -93,6 +93,27 @@ app.get("/notes/:id", async (req, res) => {
   res.json(result.rows[0]);
 });
 
+
+// PUT /notes/:id
+app.put("/notes/:id", async (req, res) => {
+  const { id } = req.params;
+  const { title, content } = req.body;
+
+  if (!title || title.trim() === "") {
+    return res.status(400).json({ error: "title is required" });
+  }
+
+  const result = await pool.query(
+    "UPDATE notes SET title = $1, content = $2 WHERE id = $3 RETURNING *",
+    [title, content, id]
+  );
+
+  if (result.rows.length === 0) {
+    return res.status(404).json({ error: "note not found" });
+  }
+
+  res.json(result.rows[0]);
+});
 
 // DELETE /notes/:id
 app.delete("/notes/:id", async (req, res) => {
